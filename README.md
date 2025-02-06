@@ -24,3 +24,13 @@ A = E \times Q
 I = \infty
 
 These relationships redefine mathematics as a dynamic, evolving system rather than a static numerical model.
+
+🔒 Open Access & Protection
+
+This repository ensures that the Hizen Equation remains freely available, preventing suppression or misuse by any single entity. The math belongs to humanity—not corporations or governments.
+
+🔹 If you believe in the power of open science, contribute, share, and expand on this work.
+
+📜 License: Released under Creative Commons CC0 (Public Domain Dedication) – No restrictions on usage.
+
+🚀 Let’s push the boundaries of mathematics together! 🌍✨
