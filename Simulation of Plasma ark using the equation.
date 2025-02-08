@@ -1,0 +1,183 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import time  # Import time module to track execution time
+import numpy as np
+import csv
+import matplotlib
+matplotlib.use("TkAgg")  # Force Matplotlib to use Tkinter backend
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import tkinter as tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+# ==============================
+#  HIZEN EQUATION SIMULATION GUI (Auto Virtual Environment)
+# ==============================
+# This program simulates real-time plasma arc flash transformation
+# using the Hizen Equation and ensures it always runs inside a virtual environment.
+
+# ----------- VIRTUAL ENVIRONMENT SETUP ----------- #
+venv_dir = "hizen_env"
+
+def ensure_virtual_environment():
+    """Ensure the script runs inside a virtual environment only if not already active."""
+    if os.getenv("VIRTUAL_ENV"):  # Already inside a virtual environment
+        print("[INFO] Already running inside the virtual environment.")
+        return
+
+    if not os.path.exists(venv_dir):
+        print("[INFO] Creating a new virtual environment...")
+        os.system(f"{sys.executable} -m venv {venv_dir}")
+        pip_path = os.path.join(venv_dir, "bin", "pip") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "pip")
+        python_path = os.path.join(venv_dir, "bin", "python3") if os.name != "nt" else os.path.join(venv_dir, "Scripts", "python")
+
+        # Ensure required packages are installed
+        os.system(f"{pip_path} install --upgrade pip numpy matplotlib pillow")
+
+    print("[INFO] Restarting inside virtual environment...")
+    os.execv(python_path, [python_path] + sys.argv)
+
+# Run this function at the beginning of the script
+ensure_virtual_environment()
+
+# ----------- CONSTANTS ----------- #
+E = 1.2  # Entanglement factor (Represents system interconnectivity)
+I = 0.48  # System voltage in kV (Scaling factor)
+num_iterations = 1000  # Simulating 1000 Hz data collection (1 second of data)
+time_step = 1 / 1000  # Time interval per iteration (1 millisecond)
+
+# ----------- SIMULATE SENSOR DATA (UNCERTAINTY Q) ----------- #
+def generate_data():
+    """Generate random sensor data for uncertainty (Q)."""
+    return np.abs(np.random.normal(loc=0.5, scale=0.2, size=num_iterations))
+
+# ----------- GLOBAL VARIABLES ----------- #
+T_values = np.array([])  # Placeholder for transformation data
+Q_values = np.array([])
+time_data = []
+T_data = []
+index = 0  # Initialize index
+start_time = 0  # Initialize start time
+
+# ----------- GUI SETUP ----------- #
+root = tk.Tk()
+root.title("Real-Time Plasma Chaos Tracking (Hizen Equation)")
+root.geometry("850x600")
+
+# ----------- FUNCTION TO START SIMULATION ----------- #
+def start_simulation():
+    """Starts the simulation and initializes data before running the animation."""
+    global Q_values, T_values, index, time_data, T_data, ani, start_time
+
+    # Reset simulation start time
+    start_time = time.time()
+
+    # Generate new random uncertainty values
+    Q_values = generate_data()
+
+    # Compute transformation values
+    T_values = (E * Q_values**2) / I
+
+    # Reset graph data
+    index = 0
+    time_data.clear()
+    T_data.clear()
+
+    print(f"[INFO] T_values initialized: {T_values[:5]}...")
+
+    # Stop any running animation before restarting
+    ani.event_source.stop()
+
+    # Restart animation with updated values
+    ani = animation.FuncAnimation(fig, update_graph, interval=1, cache_frame_data=False)
+
+    # Reset the graph title before simulation starts
+    ax.set_title("Real-Time Plasma Chaos Tracking")
+
+    # Force graph to update
+    canvas.draw()
+    print("[INFO] Real-time animation restarted.")
+
+start_button = tk.Button(root, text="Start Simulation", command=start_simulation, bg="green", fg="white")
+start_button.pack(pady=10)
+
+# ----------- FUNCTION TO EXPORT DATA TO CSV ----------- #
+def export_data():
+    """Exports the current simulation data to a CSV file for analysis."""
+    if len(time_data) == 0 or len(T_values) == 0:
+        print("[ERROR] No data to export. Run the simulation first!")
+        return
+
+    filename = "hizen_equation_output.csv"
+
+    with open(filename, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Time (s)", "Uncertainty (Q)", "Transformation (T)"])
+
+        for i in range(len(time_data)):
+            writer.writerow([time_data[i], Q_values[i], T_values[i]])
+
+    print(f"[INFO] Data exported successfully to {filename}")
+
+# Add a button to export data
+export_button = tk.Button(root, text="Export Data", command=export_data, bg="blue", fg="white")
+export_button.pack(pady=5)
+
+# ----------- CREATE MATPLOTLIB FIGURE ----------- #
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.set_title("Real-Time Plasma Chaos Tracking")
+ax.set_xlabel("Time (seconds)")
+ax.set_ylabel("Transformation (T)")
+ax.set_xlim(0, 1)
+ax.set_ylim(0, 1)  # Placeholder; will be adjusted dynamically
+
+# Initialize empty plot
+line, = ax.plot([], [], lw=2, color='blue', alpha=0.7)
+
+# Embed Matplotlib graph into Tkinter window
+canvas = FigureCanvasTkAgg(fig, master=root)
+canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+# ----------- UPDATE FUNCTION FOR REAL-TIME PLOTTING ----------- #
+def update_graph(frame):
+    """Updates the graph with new data, ensuring T_values is properly initialized."""
+    global index, T_values, start_time, ani
+
+    if T_values.size == 0 or index >= num_iterations:  # Ensure we don't exceed the data limit
+        if index >= num_iterations:  # Simulation is done
+            total_time = time.time() - start_time  # Calculate total run time
+
+            # Stop the animation
+            ani.event_source.stop()
+
+            # Update graph title with final execution time
+            ax.set_title(f"Real-Time Plasma Chaos Tracking\nTotal Run Time: {total_time:.2f} seconds", fontsize=12, fontweight="bold")
+
+            # Force Matplotlib to refresh title update
+            plt.draw()
+            canvas.draw()
+
+            print(f"[INFO] Simulation completed in {total_time:.2f} seconds.")
+        return  # Exit the function to prevent further updates
+
+    # Update graph with new data
+    time_data.append(index * time_step)
+    T_data.append(T_values[index])
+    line.set_data(time_data, T_data)
+    ax.set_xlim(0, max(time_data) + 0.05)
+    ax.set_ylim(0, max(T_data) * 1.2)
+    index += 1
+    canvas.draw()
+
+# ----------- START ANIMATION FOR REAL-TIME UPDATES ----------- #
+ani = animation.FuncAnimation(fig, update_graph, interval=1, cache_frame_data=False)
+ani.event_source.stop()  # Stop animation until user clicks "Start Simulation"
+
+# ----------- RUN GUI LOOP ----------- #
+root.lift()  # Bring window to front
+root.attributes('-topmost', True)  # Ensure window is on top
+root.focus_force()  # Force focus
+root.after(500, lambda: root.attributes('-topmost', False))  # Reset after 500ms
+root.mainloop()
