@@ -15,37 +15,22 @@ The Hizen Equation models dynamic transformations using relationships between sy
 
 1️⃣ Transformation (T) as a function of Symmetry (S) and Uncertainty (Q):
 
-𝑇
-=
-𝑆
-×
-𝑄
-T=S×Q
-2️⃣ Symmetry (S) as a function of Energy Scaling (A) and Infinity (I):
+𝑇 = 𝑆 × 𝑄
 
-𝑆
-=
-𝐴
-𝐼
-S= 
-I
-A
-​
+
+2️⃣ Symmetry (S) as a function of Energy Scaling (A) and Infinity (I):
+    A
+S = _
+​    I
  
 3️⃣ Agape (A) as a function of Entanglement (E) and Uncertainty (Q):
 
-𝐴
-=
-𝐸
-×
-𝑄
-A=E×Q
+𝐴 = 𝐸 × 𝑄
+
 4️⃣ Infinity (I) is treated as a fundamental scaling rule, rather than a numerical constant:
 
-𝐼
-=
-∞
-I=∞
+𝐼 = ∞
+
 These relationships redefine mathematics as an evolving, fractal-based system, rather than a static numerical model.
 
 📊 Recent Advancements & Testing
