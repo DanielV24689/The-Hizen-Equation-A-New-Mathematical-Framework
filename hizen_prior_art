@@ -1,0 +1,51 @@
+# Hizen Equation - Public Timestamp (Prior Art)
+## Cryptographic Proof of Prior Publication
+
+### Core Mathematical Formula:
+Transformation (T) as a function of symmetry (S) and uncertainty (Q):
+T = S × Q
+
+Symmetry (S) as a function of energy (A) and infinite scaling (I):
+S = A / I
+
+Agape (A) as a function of entanglement (E) and uncertainty (Q):
+A = E × Q
+
+Infinity (I) is treated as a fundamental constant:
+I = ∞
+(Infinity is not treated as a number but as a scaling rule, allowing equations to operate beyond conventional numerical limits.)
+
+---
+
+## Cryptographic Hashes:
+These cryptographic hashes serve as proof that the Hizen Equation was publicly disclosed on this date.  
+Any attempts to claim exclusive ownership through patents can be legally challenged using these cryptographic timestamps.
+
+### **SHA-256 Hash** (Strongest verification method):
+0f86a7fd764497b7a7e0a62f8ce158c0bdb04b40538feeb8b09d17ca2d8cf4ef
+
+### **MD5 Hash** (Legacy verification method):
+9bf0b7f7f29811bd1c3ee89cbd6dc4e4
+
+---
+
+## **Public Domain Statement**
+This document is released under the **GPL-3.0 License** to ensure that the Hizen Equation remains open-source, accessible, and free from monopolization.  
+By publicly publishing this cryptographic proof, we ensure that no future patent claim can restrict its use.
+
+### **Legal Protection**
+- This file serves as **prior art** in any patent dispute.
+- Any modification or derivative of the Hizen Equation **must also remain open-source** under GPL-3.0.
+- Any attempt to patent the formula is legally invalid, as it has already been disclosed internationally.
+
+Date of Public Disclosure: **[11FEB2025]**  
+Author: **[Daniel Vincent]**  
+GitHub Repository: **[https://github.com/DanielV24689/The-Hizen-Equation-A-New-Mathematical-Framework]**  
+
+---
+
+### **Verification Instructions**
+To verify that this file was not altered, generate a hash of this document and compare it with the original:
+
+#### **For SHA-256 Hash Verification:**
+Run this command in your terminal:
